@@ -1,28 +1,45 @@
 package com.nicolas.pokedexrush.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.nicolas.pokedexrush.R
-import com.nicolas.pokedexrush.data.PokemonSpecies
-import com.nicolas.pokedexrush.databinding.ItemPokeBinding
-import com.squareup.picasso.Picasso
 
-class PokemonAdapter (
-    var pokemonList: List<PokemonSpecies>,
-    val onItemClick:(position: Int) -> Unit
-) : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>(){
+class PokemonAdapter(
+    private var pokemonList: List<Pokemon> = emptyList(),
+    private val onItemClick: (Pokemon) -> Unit = {}
+) : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() {
+
+    class PokemonViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val nameTextView: TextView = itemView.findViewById(R.id.namePokeTextView)
+        val imageView: ImageView = itemView.findViewById(R.id.pokemonImageView)
+        val genusTextView: TextView = itemView.findViewById(R.id.genusPokemonTextView)
+        val pokedexNumTextView: TextView = itemView.findViewById(R.id.pokedexNumTextView)
+
+        fun bind(pokemon: Pokemon, onClick: (Pokemon) -> Unit) {
+            nameTextView.text = pokemon.name
+            pokedexNumTextView.text = "#${pokemon.id}"
+            itemView.setOnClickListener { onClick(pokemon) }
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = ItemPokeBinding.inflate(layoutInflater, parent, false)
-        return PokemonViewHolder(binding)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_poke, parent, false)
+        return PokemonViewHolder(view)
     }
-    }
-}
 
-class PokemonViewHolder(val binding: ItemPokeBinding) : RecyclerView.ViewHolder(binding.root){
-    fun render(pokemon: PokemonSpecies){
-        binding.namePokeTextView.text = pokemon.name
-        Picasso.get().load(pokemon.sprites.frontDefault).into(binding.pokemonImageView)
-    })
+    override fun onBindViewHolder(holder: PokemonViewHolder, position: Int) {
+        holder.bind(pokemonList[position], onItemClick)
+    }
+
+    override fun getItemCount(): Int = pokemonList.size
+
+    fun updateList(newList: List<Pokemon>) {
+        pokemonList = newList
+        notifyDataSetChanged()
+    }
 }
