@@ -96,3 +96,12 @@ data class PokemonListItem(
     @SerializedName("name") val name: String,
     @SerializedName("url") val url: String // Trae la URL de donde sacar su ID
 )
+
+data class PokemonCardModel(
+    val id: Int,
+    val name: String,
+    val imageUrl: String?,
+    val type1: String,
+    val type2: String?,
+    val description: String
+)

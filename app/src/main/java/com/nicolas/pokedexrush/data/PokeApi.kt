@@ -20,7 +20,7 @@ interface PokeApi {
     // Devuelve un objeto PokemonListResponse en lugar de List<Pokemon>
     @GET("pokemon")
     suspend fun getPokemonList(
-        @Query("limit") limit: Int = 20,
+        @Query("limit") limit: Int = 1500,
         @Query("offset") offset: Int = 0
     ): PokemonListResponse
 
